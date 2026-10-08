@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renaissance Interactive Simulation</title>
+<style>
+:root{
+  --ink:#2d241f; --paper:#fffaf0; --gold:#b8860b; --red:#8f2d2d; --blue:#345995;
+  --green:#3d7050; --cream:#f4ead2; --shadow:0 8px 24px rgba(45,36,31,.14);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia, "Times New Roman", serif;background:linear-gradient(135deg,#efe2c1,#fbf7ed);color:var(--ink);line-height:1.55}
+header{background:linear-gradient(135deg,#4a3027,#8f2d2d);color:white;padding:42px 20px;text-align:center;border-bottom:7px solid var(--gold)}
+header h1{font-size:clamp(2.1rem,5vw,4rem);margin:0 0 8px}
+header p{max-width:850px;margin:0 auto;font-size:1.15rem}
+.container{max-width:1100px;margin:auto;padding:22px}
+.progress-wrap{position:sticky;top:0;z-index:10;background:#fffdf7;border-bottom:1px solid #ddd;padding:10px 18px}
+.progress{height:12px;background:#e3d9c4;border-radius:99px;overflow:hidden;max-width:1100px;margin:auto}
+.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--red));transition:.35s}
+.card{background:var(--paper);border:1px solid #dfd0ae;border-radius:18px;padding:24px;margin:22px 0;box-shadow:var(--shadow)}
+h2{color:var(--red);margin-top:0;font-size:1.8rem}
+h3{color:#68452e}
+.badge{display:inline-block;background:var(--gold);color:white;padding:4px 10px;border-radius:99px;font-size:.8rem;font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.mini{background:#fffdf8;border:1px solid #e1d4b8;border-radius:14px;padding:16px}
+.mini strong{color:var(--red)}
+button{border:0;border-radius:12px;padding:11px 17px;font-size:1rem;cursor:pointer;font-weight:bold;background:var(--red);color:white;margin:5px 4px 5px 0}
+button:hover{filter:brightness(1.08)}
+button.secondary{background:var(--blue)}
+button.gold{background:var(--gold)}
+button.green{background:var(--green)}
+.choice{display:block;width:100%;text-align:left;background:#fff;border:2px solid #d8c9aa;color:var(--ink);margin:9px 0}
+.choice:hover{border-color:var(--gold);background:#fff8e6}
+.choice.correct{border-color:var(--green);background:#eaf6ed}
+.choice.wrong{border-color:var(--red);background:#faeaea}
+.feedback{display:none;padding:13px;border-radius:10px;margin-top:10px;background:#f2ead8}
+.show{display:block}
+.fact{border-left:5px solid var(--gold);padding:10px 15px;background:#fff8e9;margin:14px 0}
+.quote{font-style:italic;font-size:1.1rem;background:#f0e5cf;padding:18px;border-radius:12px}
+.timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.time{padding:14px;background:#fff;border-radius:12px;border-top:5px solid var(--gold)}
+.artbox{font-size:4rem;text-align:center;padding:10px;background:linear-gradient(135deg,#ead8b0,#fffaf0);border-radius:12px}
+.term{padding:14px;background:#fff;border:1px solid #ddceb0;border-radius:12px}
+select,input[type=range]{width:100%}
+.score{font-size:1.3rem;font-weight:bold;color:var(--red)}
+.small{font-size:.9rem;color:#675b52}
+.hidden{display:none}
+footer{padding:35px;text-align:center;color:#675b52}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">WORLD HISTORY • INTERACTIVE SIMULATION</div>
+  <h1>🎨 The Renaissance</h1>
+  <p>Step into Renaissance Italy. Explore Florence, meet patrons and artists, examine new ideas, and make decisions that help explain how Europe changed from the Middle Ages into the Renaissance.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+</div>
+
+<main class="container">
+
+<section class="card" data-section>
+<h2>Mission 1 — Why Florence?</h2>
+<p>You are arriving in <strong>Florence, Italy</strong> around the 1400s. Your first job is to determine why this city became one of the major centers of the Renaissance.</p>
+<div class="grid">
+  <div class="mini"><div class="artbox">🏛️</div><h3>Wealth & Trade</h3><p>Florence became wealthy through banking, commerce, and textile production. Wealthy families had money available to support buildings, artists, scholars, and public projects.</p></div>
+  <div class="mini"><div class="artbox">🏦</div><h3>Banking</h3><p>Florence was an important financial center. Banking helped create powerful families who could spend money on art and culture.</p></div>
+  <div class="mini"><div class="artbox">📚</div><h3>Ideas & Learning</h3><p>Florence became a place where classical Greek and Roman ideas were studied alongside new approaches to art, science, literature, and human potential.</p></div>
+</div>
+<div class="fact"><strong>Think like a historian:</strong> A Renaissance center did not become important for just one reason. Wealth, trade, political influence, education, artists, and wealthy supporters reinforced one another.</div>
+<h3>Choose the strongest explanation.</h3>
+<button class="choice" onclick="answer(this,false,'Florence was not simply famous because it was the largest city. Its wealth and cultural networks were important.')">It was simply the largest city in Europe.</button>
+<button class="choice" onclick="answer(this,true,'Correct. Florence combined wealth from banking and trade with powerful families, artists, scholars, and a culture of patronage.')">Its wealth, banking, trade, patrons, and intellectual culture reinforced one another.</button>
+<button class="choice" onclick="answer(this,false,'Geography mattered, but the Renaissance was not caused by geography alone.')">Its location alone caused the Renaissance.</button>
+<div class="feedback"></div>
+</section>
+
+<section class="card" data-section>
+<h2>Mission 2 — Meet the Medici</h2>
+<p>The <strong>Medici</strong> were a wealthy Florentine banking family who became extremely influential in Florentine politics and culture. They supported artists, architects, scholars, and humanist learning.</p>
+<div class="grid">
+<div class="mini"><h3>💰 Banking</h3><p>The family built great wealth through banking and business.</p></div>
+<div class="mini"><h3>🎨 Patronage</h3><p>Members of the family supported artists and cultural projects.</p></div>
+<div class="mini"><h3>🏛️ Influence</h3><p>The Medici became politically powerful in Florence and helped make the city a major cultural center.</p></div>
+</div>
+<h3>What is a patron of the arts?</h3>
+<select id="patronSelect" onchange="checkSelect()">
+<option value="">Choose an answer...</option>
+<option value="wrong">An artist who refuses to sell artwork</option>
+<option value="correct">A person or organization that financially supports artists or cultural work</option>
+<option value="wrong">A government soldier who protects museums</option>
+</select>
+<div class="feedback" id="patronFeedback"></div>
+<p class="quote">Patronage mattered because great works of art often required time, materials, training, and money.</p>
+</section>
+
+<section class="card" data-section>
+<h2>Mission 3 — Humanism</h2>
+<p><strong>Humanism</strong> was an intellectual movement that emphasized the study of classical Greek and Roman texts and focused attention on human abilities, education, civic life, and individual potential.</p>
+<div class="grid">
+<div class="term"><strong>Middle Ages:</strong><br>Religious ideas were central to much European culture and education.</div>
+<div class="term"><strong>Renaissance Humanism:</strong><br>Classical learning and human potential received renewed attention while Christianity remained important to European society.</div>
+</div>
+<h3>Sort the ideas</h3>
+<p>Which idea fits Renaissance humanism most directly?</p>
+<button class="choice" onclick="answer(this,true,'Yes. Humanists studied classical texts and emphasized education and human potential.')">“Education and the study of classical texts can help people develop their abilities.”</button>
+<button class="choice" onclick="answer(this,false,'Humanism did not mean rejecting all religion. Renaissance humanists could be deeply religious.')">“People must reject all religion.”</button>
+<div class="feedback"></div>
+</section>
+
+<section class="card" data-section>
+<h2>Mission 4 — The Artists' Workshop</h2>
+<p>Enter the world of Renaissance art. Match each artist with the work for which they are especially known in this unit.</p>
+<div class="grid">
+<div class="mini"><div class="artbox">🖼️</div><h3>Leonardo da Vinci</h3><p><strong>Mona Lisa</strong> and <strong>The Last Supper</strong>. Leonardo combined artistic observation with curiosity about anatomy, nature, engineering, and science.</p></div>
+<div class="mini"><div class="artbox">⛪</div><h3>Michelangelo</h3><p><strong>La Pietà</strong> and the <strong>Sistine Chapel ceiling</strong>. He was a sculptor, painter, architect, and poet.</p></div>
+<div class="mini"><div class="artbox">🏛️</div><h3>Raphael</h3><p><strong>The School of Athens</strong>, famous for its gathering of philosophers in a grand classical architectural setting.</p></div>
+<div class="mini"><div class="artbox">🗿</div><h3>Donatello</h3><p><strong>Mary Magdalene</strong>, a powerful sculpture showing a more emotionally intense and human presentation of the figure.</p></div>
+</div>
+<h3>Artist Challenge</h3>
+<select id="artistSelect" onchange="artistCheck()">
+<option value="">Who painted The School of Athens?</option>
+<option>Leonardo da Vinci</option>
+<option>Michelangelo</option>
+<option>Raphael</option>
+<option>Donatello</option>
+</select>
+<div class="feedback" id="artistFeedback"></div>
+</section>
+
+<section class="card" data-section>
+<h2>Mission 5 — See Like a Renaissance Artist</h2>
+<p>Renaissance artists increasingly used techniques that created a convincing sense of three-dimensional space. One important technique was <strong>linear perspective</strong>.</p>
+<div class="mini">
+<h3>📐 Linear Perspective</h3>
+<p>Parallel lines appear to move toward a <strong>vanishing point</strong> as they recede into the distance. This helped artists create a more realistic illusion of depth on a flat surface.</p>
+<div style="font-size:2rem;text-align:center">╲ &nbsp;&nbsp; • &nbsp;&nbsp; ╱<br>╲ &nbsp;&nbsp; ● &nbsp;&nbsp; ╱<br>╲ &nbsp; ◉ &nbsp; ╱</div>
+<p class="small">Imagine the lines of a road or building drawing your eye toward one point in the distance.</p>
+</div>
+<h3>Quick Check</h3>
+<button class="choice" onclick="answer(this,true,'Correct. A vanishing point helps create the illusion of depth.')">A vanishing point helps create depth.</button>
+<button class="choice" onclick="answer(this,false,'Linear perspective is about creating the appearance of three-dimensional space, not choosing brighter paint.')">It means using brighter colors.</button>
+<div class="feedback"></div>
+</section>
+
+<section class="card" data-section>
+<h2>Mission 6 — From Medieval Themes to Renaissance Themes</h2>
+<p>Compare broad cultural tendencies. Remember: these are patterns, not descriptions of every medieval or Renaissance work.</p>
+<div class="grid">
+<div class="mini"><h3>☠️ Some Medieval Art</h3><p>Much medieval European art was religious in subject. After the Black Death, images of death, suffering, demons, judgment, and mortality became important in some European artistic traditions.</p></div>
+<div class="mini"><h3>🌿 Renaissance Art</h3><p>Religious subjects remained important, but artists increasingly explored portraits, classical mythology, nature, landscapes, human anatomy, civic life, and individual experience.</p></div>
+<div class="mini"><h3>🎵 Music</h3><p>Renaissance music expanded polyphony and experimented with richer vocal textures. It was not simply “happy music,” but musical styles became more varied and sophisticated.</p></div>
+</div>
+<h3>Scenario: You are a Renaissance patron.</h3>
+<p>You want a painting for your home. Which request best represents the broader Renaissance expansion of subject matter?</p>
+<button class="choice" onclick="answer(this,true,'Yes. Renaissance artists continued religious art while also producing portraits, mythological scenes, landscapes, and other secular subjects.')">“Paint a portrait of my family in a natural landscape, with careful attention to realistic human features.”</button>
+<button class="choice" onclick="answer(this,false,'Religious art continued during the Renaissance, so this is not a complete contrast. The key change is the expansion of subjects, not the disappearance of religion.')">“Only religious subjects are allowed in Renaissance art.”</button>
+<div class="feedback"></div>
+</section>
+
+<section class="card" data-section>
+<h2>Mission 7 — The Renaissance Art Gallery</h2>
+<p>Use the clues to identify the work.</p>
+<div class="mini">
+<h3>Gallery Clue A</h3>
+<p>“I am a portrait famous for my mysterious expression.”</p>
+<select onchange="galleryCheck(this,'Mona Lisa')">
+<option>Choose...</option><option>Mona Lisa</option><option>School of Athens</option><option>La Pietà</option><option>Mary Magdalene</option>
+</select>
+<div class="feedback"></div>
+</div>
+<div class="mini">
+<h3>Gallery Clue B</h3>
+<p>“I show philosophers gathered in a grand classical architectural setting.”</p>
+<select onchange="galleryCheck(this,'School of Athens')">
+<option>Choose...</option><option>Mona Lisa</option><option>School of Athens</option><option>La Pietà</option><option>Mary Magdalene</option>
+</select>
+<div class="feedback"></div>
+</div>
+<div class="mini">
+<h3>Gallery Clue C</h3>
+<p>“I am Michelangelo's sculpture showing Mary holding the body of Jesus.”</p>
+<select onchange="galleryCheck(this,'La Pietà')">
+<option>Choose...</option><option>Mona Lisa</option><option>School of Athens</option><option>La Pietà</option><option>Mary Magdalene</option>
+</select>
+<div class="feedback"></div>
+</div>
+</section>
+
+<section class="card" data-section>
+<h2>Mission 8 — Machiavelli: Power & Politics</h2>
+<p><strong>Niccolò Machiavelli</strong> was a Florentine political thinker. His best-known work, <em>The Prince</em>, discusses how rulers gain, maintain, and use political power. It is often read as a practical analysis of politics rather than as a simple list of ideal moral behavior.</p>
+<div class="fact"><strong>Important idea:</strong> Machiavelli examined political leadership in terms of power, strategy, reputation, security, and the behavior of rulers and their subjects.</div>
+<h3>🦊 Fox + 🦁 Lion Challenge</h3>
+<p>Machiavelli famously used two animals as a metaphor for qualities a ruler may need:</p>
+<div class="grid">
+<div class="mini"><h3>🦊 Fox</h3><p>The fox represents <strong>cunning, flexibility, and the ability to recognize or avoid traps</strong>.</p></div>
+<div class="mini"><h3>🦁 Lion</h3><p>The lion represents <strong>strength, force, and the ability to confront threats</strong>.</p></div>
+</div>
+<p class="quote">“A ruler needs both the fox and the lion” means that political leadership may require both clever strategy and the strength to act.</p>
+<h3>Decision Scenario</h3>
+<p>You are advising a ruler. A rival has created a trap that would weaken your position, but your city also faces a direct military threat. Which response best demonstrates Machiavelli's metaphor?</p>
+<button class="choice" onclick="answer(this,true,'Exactly: recognizing a trap calls for fox-like cunning, while responding to a direct threat may require lion-like strength.')">Use strategy to avoid the trap, while maintaining enough strength to confront the threat.</button>
+<button class="choice" onclick="answer(this,false,'Machiavelli’s metaphor combines two different qualities rather than relying entirely on one.')">Use force in every situation.</button>
+<button class="choice" onclick="answer(this,false,'Machiavelli’s metaphor combines two different qualities rather than relying entirely on one.')">Use cleverness but never show strength.</button>
+<div class="feedback"></div>
+</section>
+
+<section class="card" data-section>
+<h2>Final Mission — Build the Renaissance</h2>
+<p>You are now the cultural adviser to a city. Pick the choices that would help explain why Renaissance culture developed where and how it did.</p>
+<div class="grid">
+<div class="mini"><label><strong>1. Who should fund artists?</strong></label>
+<select id="final1"><option value="">Choose...</option><option value="good">Wealthy patrons and institutions</option><option value="bad">Nobody; artists need no resources</option></select></div>
+<div class="mini"><label><strong>2. What intellectual movement?</strong></label>
+<select id="final2"><option value="">Choose...</option><option value="good">Humanism</option><option value="bad">Feudalism</option></select></div>
+<div class="mini"><label><strong>3. What art technique?</strong></label>
+<select id="final3"><option value="">Choose...</option><option value="good">Linear perspective</option><option value="bad">No attempt at depth</option></select></div>
+<div class="mini"><label><strong>4. Which political thinker?</strong></label>
+<select id="final4"><option value="">Choose...</option><option value="good">Machiavelli</option><option value="bad">Justin Martyr</option></select></div>
+</div>
+<button class="gold" onclick="finish()">Complete Simulation</button>
+<div id="finalResult" class="feedback"></div>
+</section>
+
+<section class="card">
+<h2>📝 Exit Ticket</h2>
+<p>Answer these in your own words. Your teacher can use them for a written response or class discussion.</p>
+<ol>
+<li>Why did Florence become a center of the Renaissance?</li>
+<li>How did patrons such as the Medici influence Renaissance culture?</li>
+<li>How did humanism change the subjects and ideas explored by Renaissance thinkers and artists?</li>
+<li>How did Renaissance artists use linear perspective?</li>
+<li>Describe one way Renaissance art differed from some common medieval artistic themes.</li>
+<li>What did Machiavelli mean by the “fox” and the “lion”?</li>
+</ol>
+<textarea id="notes" style="width:100%;min-height:160px;padding:12px;border-radius:10px;border:1px solid #cdbf9e;font-family:inherit" placeholder="Type your thoughts here. Your answers stay on this device/browser and are not submitted anywhere."></textarea>
+<br><button class="secondary" onclick="window.print()">Print / Save as PDF</button>
+</section>
+
+</main>
+
+<footer>
+<strong>Renaissance Interactive Simulation</strong><br>
+Designed as a self-contained classroom activity. No student login or account is required.<br>
+Historical note: Renaissance culture varied across time and place; the simulation presents major patterns and connections rather than claiming every artwork or musical work fit one category.
+</footer>
+
+<script>
+let correct=0, answered=0;
+const sections=document.querySelectorAll('[data-section]');
+function updateProgress(){
+  const pct=Math.min(100,Math.round((answered/18)*100));
+  document.getElementById('progressBar').style.width=pct+'%';
+}
+function answer(btn,isCorrect,msg){
+  const card=btn.closest('.card');
+  const buttons=card.querySelectorAll('.choice');
+  if(btn.dataset.done) return;
+  btn.dataset.done='1';
+  buttons.forEach(b=>b.disabled=true);
+  if(isCorrect){correct++;btn.classList.add('correct')}
+  else btn.classList.add('wrong');
+  answered++;
+  const f=card.querySelector('.feedback');
+  f.textContent=(isCorrect?'✅ Correct! ':'💡 Keep thinking. ')+msg;
+  f.classList.add('show');
+  updateProgress();
+}
+function checkSelect(){
+  const s=document.getElementById('patronSelect');
+  const f=document.getElementById('patronFeedback');
+  if(!s.value)return;
+  answered++;
+  if(s.value==='correct'){correct++;f.textContent='✅ Correct! A patron provides financial or institutional support for artists and cultural work.';f.className='feedback show';}
+  else{f.textContent='💡 A patron is a supporter who provides money, resources, commissions, or protection for artists and cultural work.';f.className='feedback show';}
+  s.disabled=true;updateProgress();
+}
+function artistCheck(){
+  const s=document.getElementById('artistSelect'), f=document.getElementById('artistFeedback');
+  if(!s.value)return;
+  answered++;
+  if(s.value==='Raphael'){correct++;f.textContent='✅ Correct! Raphael painted The School of Athens.'}
+  else f.textContent='💡 The School of Athens was painted by Raphael.';
+  f.className='feedback show';s.disabled=true;updateProgress();
+}
+function galleryCheck(s,correctAnswer){
+  const f=s.nextElementSibling;
+  if(!s.value)return;
+  answered++;
+  if(s.value===correctAnswer){correct++;f.textContent='✅ Correct!'}
+  else f.textContent='💡 The correct answer is '+correctAnswer+'.';
+  f.className='feedback show';s.disabled=true;updateProgress();
+}
+function finish(){
+  let vals=['final1','final2','final3','final4'].map(id=>document.getElementById(id).value);
+  const f=document.getElementById('finalResult');
+  if(vals.includes('')){f.textContent='Choose an answer for all four questions first.';f.className='feedback show';return;}
+  let n=vals.filter(v=>v==='good').length;
+  f.textContent='🏆 Simulation complete! You correctly connected '+n+' of 4 major Renaissance ideas in the final challenge. Earlier activity score: '+correct+' correct responses.';
+  f.className='feedback show';
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
